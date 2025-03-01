@@ -45,7 +45,7 @@ const local: Record<string, string> = {
   rebarRenderer: 'Rebar',
 };
 
-const columnTypeMap: { [attribute: string]: ColumnType<SlabType> } = {
+export const columnTypeMap: { [attribute: string]: ColumnType<SlabType> } = {
   ...Object.fromEntries(
     PartTypeKeys.map((dataIndex) => [
       dataIndex,
@@ -64,23 +64,36 @@ const columnTypeMap: { [attribute: string]: ColumnType<SlabType> } = {
   rebarRenderer: {
     title: local['rebarRenderer'],
     key: 'rebarRenderer',
-    render: (_, element) =>
-      `${element.rebarAmountBottom.toFixed(0)}ø${element.rebarDiameterBottom.toFixed(1)} Bottom, ${element.rebarAmountTop.toFixed(
-        0
-      )}ø${element.rebarDiameterTop.toFixed(1)} Top`,
+    render: (_, element) => (
+      <p>
+        <span>
+          {`${element.rebarAmountBottom.toFixed(0)}ø${element.rebarDiameterBottom.toFixed(1)}`}
+          <sub>Bottom</sub>
+        </span>{' '}
+        <span>
+          {`${element.rebarAmountTop.toFixed(0)}ø${element.rebarDiameterTop.toFixed(1)}`}
+          <sub>Top</sub>
+        </span>
+      </p>
+    ),
   },
   type: {
-    title: local['title'],
-    key: 'title',
-    render: (_, element) => '',
+    title: local['type'],
+    key: 'type',
+    render: (_, element) =>
+      `${element.typeOfElement} (${element.dimensions_l.toFixed()}, ${element.dimensions_w.toFixed()}, ${element.dimensions_h.toFixed()})`,
   },
-  weight: {},
+  weight: {
+    title: local['weight'],
+    key: 'weight',
+    render: (_, element) => `${(element.dimensions_l * element.dimensions_w * element.dimensions_h * 0.6 * 0.0000025).toFixed(0)} kg`,
+  },
 };
 
 const architect = CostumUIKeys;
 
-export const columns: Record<UserCategory, ColumnType<SlabType>[]> = {
-  [UserCategory.Architect]: architect.map((s) => columnTypeMap[s]),
+export const defaultValues: Record<UserCategory, string[]> = {
+  [UserCategory.Architect]: architect,
   [UserCategory.Engineer]: [],
   [UserCategory.Client]: [],
   [UserCategory.Contracter]: [],
