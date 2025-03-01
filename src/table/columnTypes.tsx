@@ -93,6 +93,7 @@ export const columnTypeMap: { [attribute: string]: ColumnType<SlabType> } = {
 const architect = CostumUIKeys;
 
 export const defaultValues: Record<UserCategory, string[]> = {
+  [UserCategory.Ubermensch]: [...PartTypeKeys, ...CostumUIKeys],
   [UserCategory.Architect]: architect,
   [UserCategory.Engineer]: [],
   [UserCategory.Client]: [],
