@@ -18,6 +18,6 @@ export const useTableStore = create<TableStore>((set) => ({
       if (index !== -1) s.elements[index] = { ...element };
       return { elements: [...s.elements] };
     }),
-  userCategory: UserCategory.Architect,
+  userCategory: UserCategory.Ubermensch,
   setUserCategory: (userCategory: UserCategory) => set((s) => ({ userCategory })),
 }));
