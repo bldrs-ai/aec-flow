@@ -54,3 +54,14 @@ export const DefaultRenderValues: Record<UserCategory, string[]> = {
   [UserCategory.Contracter]: [],
 };
 
+export const typeRenderer = (element: SlabType) =>
+  `${element.typeOfElement} (${element.dimensions_l.toFixed()}, ${element.dimensions_w.toFixed()}, ${element.dimensions_h.toFixed()})`;
+
+export const getPartsWithUniqueType = (slabs: SlabType[]): SlabType[] => {
+  const slabMap: { [type: string]: SlabType } = {};
+  slabs.map((slab) => {
+    slabMap[typeRenderer(slab)] = slab;
+  });
+
+  return Object.values(slabMap);
+};
