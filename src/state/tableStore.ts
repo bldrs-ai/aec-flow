@@ -2,12 +2,16 @@ import { create } from 'zustand';
 import { SlabType } from '../types/slabType';
 import { UserCategory } from '../enums/user';
 import { StartData } from './data';
+import DefaultRenderEmpty from 'antd/es/config-provider/defaultRenderEmpty';
+import { DefaultRenderValues } from '../table/attributeDefinition';
 
 type TableStore = {
   elements: SlabType[];
   updateElement: (element: SlabType) => void;
   userCategory: UserCategory;
   setUserCategory: (c: UserCategory) => void;
+  userAttributeMap: Record<UserCategory, string[]>;
+  setUserAttributeMap: (userCategory: UserCategory, attributes: string[]) => void;
 };
 
 export const useTableStore = create<TableStore>((set) => ({
@@ -20,4 +24,6 @@ export const useTableStore = create<TableStore>((set) => ({
     }),
   userCategory: UserCategory.Ubermensch,
   setUserCategory: (userCategory: UserCategory) => set((s) => ({ userCategory })),
+  userAttributeMap: DefaultRenderValues,
+  setUserAttributeMap: (userCategory, attributes) => set((s) => ({ userAttributeMap: { ...s.userAttributeMap, [userCategory]: attributes } })),
 }));
