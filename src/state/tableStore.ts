@@ -11,6 +11,7 @@ type TableStore = {
   setUserCategory: (c: UserCategory) => void;
   userAttributeMap: Record<UserCategory, string[]>;
   setUserAttributeMap: (userCategory: UserCategory, attributes: string[]) => void;
+  viewer: any;
 };
 
 export const useTableStore = create<TableStore>((set) => ({
@@ -25,4 +26,5 @@ export const useTableStore = create<TableStore>((set) => ({
   setUserCategory: (userCategory: UserCategory) => set((s) => ({ userCategory })),
   userAttributeMap: DefaultRenderValues,
   setUserAttributeMap: (userCategory, attributes) => set((s) => ({ userAttributeMap: { ...s.userAttributeMap, [userCategory]: attributes } })),
+  viewer: undefined,
 }));
