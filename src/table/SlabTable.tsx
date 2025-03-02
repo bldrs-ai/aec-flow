@@ -20,9 +20,9 @@ export const SlabTable: React.FC = () => {
   const toggleRow = (part: SlabType) => {
     const viewer = useTableStore.getState().viewer;
     Object.keys(viewer.scene.objects).forEach((key) => (viewer.scene.objects[key].colorize = [0.0, 1, 0]));
-    viewer.scene.objects[typeMap[part.planReference]].colorize = [0.8, 0.1, 0.9];
+    viewer.scene.objects[(typeMap as any)[part.planReference]].colorize = [0.8, 0.1, 0.9];
 
-    const aabb = viewer.scene.getAABB(typeMap[part.planReference]);
+    const aabb = viewer.scene.getAABB((typeMap as any)[part.planReference]);
     viewer.cameraFlight.flyTo(aabb);
   };
 

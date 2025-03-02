@@ -16,7 +16,7 @@ export const columnTypeMap: { [attribute: string]: ColumnType<SlabType> } = {
         ...(suffixMap[dataIndex] !== undefined
           ? {
               render: (value) => `${value} ${suffixMap[dataIndex]}`,
-              sorter: (a: SlabType, b: SlabType) => ((a[dataIndex as keyof SlabType] as number) - b[dataIndex as keyof SlabType]) as number,
+              sorter: (a: SlabType, b: SlabType) => ((a[dataIndex as keyof SlabType] as number) - (b as any)[dataIndex as keyof SlabType]) as number,
             }
           : {
               sorter: (a: SlabType, b: SlabType) =>

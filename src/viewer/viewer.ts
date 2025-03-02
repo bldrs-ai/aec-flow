@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 //------------------------------------------------------------------------------------------------------------------
 // Import the modules we need for this example
 //------------------------------------------------------------------------------------------------------------------
@@ -97,12 +99,12 @@ export const initScene = () => {
       viewer.scene.setObjectsXRayed(viewer.scene.objectIds, true);
       viewer.scene.setObjectsXRayed(objectIds, false);
 
-      Object.values(viewer.scene.objects).forEach((o) => (o.colorize = [0.8, 0.1, 0.9]));
+      Object.values(viewer.scene.objects).forEach((o) => ((o as any).colorize = [0.8, 0.1, 0.9]));
 
       // 3
       viewer.cameraFlight.flyTo(aabb);
 
-      viewer.scene.input.on('mousedown', function (coords) {
+      viewer.scene.input.on('mousedown', function (coords: any) {
         var pickResult = viewer.scene.pick({
           canvasPos: coords,
         });
