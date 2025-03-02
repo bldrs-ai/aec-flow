@@ -19,21 +19,24 @@ export const PartTypeKeys = [
   'rebarDiameterBottom',
   'rebarAmountBottom',
 ];
+const EditKey = 'edit';
 
-export const suffixMap = {
+export const suffixMap: Record<string, string> = {
   location_x: 'm',
   location_y: 'm',
   location_z: 'm',
-  strength: 'kg',
+  weight: 'kg',
   dimensions_l: 'm',
   dimensions_w: 'm',
   dimensions_h: 'm',
   liveload: 'kN/m2',
   rebarDiameterTop: 'mm',
   rebarDiameterBottom: 'mm',
+  rebarAmountTop: '',
+  rebarAmountBottom: '',
 };
 
-export const AllDefinedRenders = [...CostumUIKeys, ...PartTypeKeys];
+export const AllDefinedRenders = [...CostumUIKeys, ...PartTypeKeys, EditKey];
 export const RenderLocal: Record<string, string> = {
   id: 'Id',
   planReference: 'Plan Reference',
@@ -55,16 +58,31 @@ export const RenderLocal: Record<string, string> = {
   location: 'Location',
   rebarRenderer: 'Rebar',
   count: 'Count',
+  edit: 'Edit Element',
 };
+
+export const locationRenderer = (element: SlabType) => `(${element.location_x.toFixed(2)}, ${element.location_y.toFixed(2)}, ${element.location_z.toFixed(2)})`;
+export const rebarRenderer = (element: SlabType) => (
+  <>
+    <span>
+      {`${element.rebarAmountBottom.toFixed(0)}ø${element.rebarDiameterBottom.toFixed(1)}`}
+      <sub>Bottom</sub>
+    </span>{' '}
+    <span>
+      {`${element.rebarAmountTop.toFixed(0)}ø${element.rebarDiameterTop.toFixed(1)}`}
+      <sub>Top</sub>
+    </span>
+  </>
+);
 
 export const DefaultRenderValues: Record<UserCategory, string[]> = {
   [UserCategory.Ubermensch]: AllDefinedRenders.filter((s) => AllDefinedRenders.includes(s)),
   [UserCategory.Architect]: ['type', 'count', 'planReference', 'dimensions_l', 'dimensions_w', 'dimensions_h'].filter((s) => AllDefinedRenders.includes(s)),
-  [UserCategory.Engineer]: ['type', 'location', 'weight', 'planReference', 'dimensions_l', 'dimensions_h', 'strength', 'liveload'].filter((s) =>
+  [UserCategory.Engineer]: ['type', 'location', 'weight', 'planReference', 'dimensions_l', 'dimensions_h', 'strength', 'liveload', 'edit'].filter((s) =>
     AllDefinedRenders.includes(s)
   ),
   [UserCategory.Client]: ['type', 'typeOfElement', 'count'].filter((s) => AllDefinedRenders.includes(s)),
-  [UserCategory.Contracter]: ['id', 'type', 'planReference', 'location', 'weight', 'dimensions_l', 'dimensions_w', 'dimensions_h'],
+  [UserCategory.Contracter]: ['id', 'type', 'planReference', 'location', 'weight', 'dimensions_l', 'dimensions_w', 'dimensions_h', 'edit'],
 };
 
 export const reduceAndUseCount = [UserCategory.Architect, UserCategory.Client];
@@ -80,3 +98,5 @@ export const getPartsWithUniqueType = (slabs: SlabType[]): SlabType[] => {
 
   return Object.values(slabMap);
 };
+
+export const getWeight = (element: SlabType) => element.dimensions_l * element.dimensions_w * element.dimensions_h * 0.6 * 0.0000025;
