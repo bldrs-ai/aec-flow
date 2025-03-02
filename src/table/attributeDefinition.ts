@@ -57,14 +57,14 @@ export const RenderLocal: Record<string, string> = {
   count: 'Count',
 };
 
-const architect = [...CostumUIKeys, 'count'];
-
 export const DefaultRenderValues: Record<UserCategory, string[]> = {
-  [UserCategory.Ubermensch]: AllDefinedRenders,
-  [UserCategory.Architect]: architect,
-  [UserCategory.Engineer]: [],
-  [UserCategory.Client]: ['type', 'typeOfElement', 'count'],
-  [UserCategory.Contracter]: [],
+  [UserCategory.Ubermensch]: AllDefinedRenders.filter((s) => AllDefinedRenders.includes(s)),
+  [UserCategory.Architect]: ['type', 'count', 'planReference', 'dimensions_l', 'dimensions_w', 'dimensions_h'].filter((s) => AllDefinedRenders.includes(s)),
+  [UserCategory.Engineer]: ['type', 'location', 'weight', 'planReference', 'dimensions_l', 'dimensions_h', 'strength', 'liveload'].filter((s) =>
+    AllDefinedRenders.includes(s)
+  ),
+  [UserCategory.Client]: ['type', 'typeOfElement', 'count'].filter((s) => AllDefinedRenders.includes(s)),
+  [UserCategory.Contracter]: ['id', 'type', 'planReference', 'location', 'weight', 'dimensions_l', 'dimensions_w', 'dimensions_h'],
 };
 
 export const reduceAndUseCount = [UserCategory.Architect, UserCategory.Client];
