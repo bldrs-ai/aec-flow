@@ -1,6 +1,7 @@
 export enum UserCategory {
-  Architect,
-  Engineer,
-  Client,
-  Contracter,
+  Ubermensch = 'Ubermensch',
+  Architect = 'Architect',
+  Engineer = 'Engineer',
+  Client = 'Client',
+  Contracter = 'Contracter',
 }
