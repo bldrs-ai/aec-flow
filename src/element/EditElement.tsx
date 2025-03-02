@@ -13,8 +13,8 @@ export const EditElement: React.FC<{ element: SlabType }> = ({ element }) => {
     if (!formRef.current) return;
     const values = formRef.current.getFieldsValue();
     // casting the values that are in the suffix map to numbers
-    Object.keys(suffixMap).forEach((k) => (values[k] = Number(values[k])));
-    useTableStore.getState().updateElement(values as SlabType);
+    Object.keys(suffixMap).forEach((k) => values[k] !== undefined && (values[k] = Number(values[k])));
+    useTableStore.getState().updateElement({ ...element, ...(values as Partial<SlabType>) });
     setOpen(false);
   }
 
