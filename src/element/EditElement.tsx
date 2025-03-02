@@ -3,6 +3,7 @@ import { SlabType } from '../types/slabType';
 import { useRef, useState } from 'react';
 import { DefaultRenderValues, PartTypeKeys, RenderLocal, suffixMap, typeRenderer } from '../table/attributeDefinition';
 import { useTableStore } from '../state/tableStore';
+import { IoMdHammer } from 'react-icons/io';
 
 export const EditElement: React.FC<{ element: SlabType }> = ({ element }) => {
   const activeGlobalUserCategory = useTableStore((s) => s.userCategory);
@@ -20,7 +21,10 @@ export const EditElement: React.FC<{ element: SlabType }> = ({ element }) => {
 
   return (
     <>
-      <Button onClick={() => setOpen(true)}>edit element</Button>
+      <Button style={{ display: 'flex', flexDirection: 'row', gap: 6 }} onClick={() => setOpen(true)}>
+        <IoMdHammer />
+        edit
+      </Button>
       <Drawer
         onClose={() => setOpen(false)}
         open={open}
