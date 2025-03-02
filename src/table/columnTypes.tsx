@@ -1,6 +1,6 @@
 import { ColumnType } from 'antd/es/table';
 import { SlabType } from '../types/slabType';
-import { PartTypeKeys, RenderLocal, suffixMap, typeRenderer } from './attributeDefinition';
+import { locationRenderer, PartTypeKeys, RenderLocal, suffixMap, typeRenderer, rebarRenderer, getWeight } from './attributeDefinition';
 import { useTableStore } from '../state/tableStore';
 
 export const columnTypeMap: { [attribute: string]: ColumnType<SlabType> } = {
@@ -11,30 +11,27 @@ export const columnTypeMap: { [attribute: string]: ColumnType<SlabType> } = {
         title: RenderLocal[dataIndex],
         dataIndex,
         key: dataIndex,
-        ...(suffixMap[dataIndex] ? { render: (value) => `${value} ${suffixMap[dataIndex]}` } : {}),
+        ...(suffixMap[dataIndex] !== undefined
+          ? {
+              render: (value) => `${value} ${suffixMap[dataIndex]}`,
+              sorter: (a: SlabType, b: SlabType) => ((a[dataIndex as keyof SlabType] as number) - b[dataIndex as keyof SlabType]) as number,
+            }
+          : {
+              sorter: (a: SlabType, b: SlabType) =>
+                (a[dataIndex as keyof SlabType] as string).localeCompare(b[dataIndex as keyof SlabType] as string, undefined, { numeric: true }),
+            }),
       },
     ])
   ),
   location: {
     title: RenderLocal['location'],
     key: 'location',
-    render: (_, element) => `(${element.location_x.toFixed(2)}, ${element.location_y.toFixed(2)}, ${element.location_z.toFixed(2)})`,
+    render: (_, element) => locationRenderer(element),
   },
   rebarRenderer: {
     title: RenderLocal['rebarRenderer'],
     key: 'rebarRenderer',
-    render: (_, element) => (
-      <>
-        <span>
-          {`${element.rebarAmountBottom.toFixed(0)}ø${element.rebarDiameterBottom.toFixed(1)}`}
-          <sub>Bottom</sub>
-        </span>{' '}
-        <span>
-          {`${element.rebarAmountTop.toFixed(0)}ø${element.rebarDiameterTop.toFixed(1)}`}
-          <sub>Top</sub>
-        </span>
-      </>
-    ),
+    render: (_, element) => rebarRenderer(element),
   },
   type: {
     title: RenderLocal['type'],
@@ -44,7 +41,8 @@ export const columnTypeMap: { [attribute: string]: ColumnType<SlabType> } = {
   weight: {
     title: RenderLocal['weight'],
     key: 'weight',
-    render: (_, element) => `${(element.dimensions_l * element.dimensions_w * element.dimensions_h * 0.6 * 0.0000025).toFixed(0)} kg`,
+    render: (_, element) => `${getWeight(element).toFixed(0)} kg`,
+    sorter: (a, b) => getWeight(a) - getWeight(b),
   },
   count: {
     title: RenderLocal['count'],
@@ -53,5 +51,9 @@ export const columnTypeMap: { [attribute: string]: ColumnType<SlabType> } = {
       const elementDerivedType = typeRenderer(element);
       return useTableStore.getState().elements.filter((s) => elementDerivedType === typeRenderer(s)).length;
     },
+    sorter: (a, b) =>
+      useTableStore.getState().elements.filter((s) => typeRenderer(a) === typeRenderer(s)).length -
+      useTableStore.getState().elements.filter((s) => typeRenderer(b) === typeRenderer(s)).length,
+  },
   },
 };
