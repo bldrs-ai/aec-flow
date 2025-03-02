@@ -3,7 +3,7 @@ import { useTableStore } from '../state/tableStore';
 import { columnTypeMap } from './columnTypes';
 import { SettingsAndFilterPanel } from '../userView/SettingsAndFilterPanel';
 import { useEffect, useState } from 'react';
-import { getPartsWithUniqueType } from './attributeDefinition';
+import { getPartsWithUniqueType, reduceAndUseCount } from './attributeDefinition';
 
 export const SlabTable: React.FC = () => {
   const elements = useTableStore((s) => s.elements);
@@ -18,7 +18,7 @@ export const SlabTable: React.FC = () => {
   return (
     <>
       <SettingsAndFilterPanel />
-      <Table dataSource={userCategory ? getPartsWithUniqueType(elements) : elements} columns={columns}></Table>
+      <Table dataSource={reduceAndUseCount.includes(userCategory) ? getPartsWithUniqueType(elements) : elements} columns={columns}></Table>
     </>
   );
 };

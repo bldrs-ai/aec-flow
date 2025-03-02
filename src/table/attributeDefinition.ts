@@ -54,6 +54,8 @@ export const DefaultRenderValues: Record<UserCategory, string[]> = {
   [UserCategory.Contracter]: [],
 };
 
+export const reduceAndUseCount = [UserCategory.Architect, UserCategory.Client];
+
 export const typeRenderer = (element: SlabType) =>
   `${element.typeOfElement} (${element.dimensions_l.toFixed()}, ${element.dimensions_w.toFixed()}, ${element.dimensions_h.toFixed()})`;
 
