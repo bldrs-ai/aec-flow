@@ -61,7 +61,9 @@ export const RenderLocal: Record<string, string> = {
   edit: 'Edit Element',
 };
 
-export const locationRenderer = (element: SlabType) => `(${element.location_x.toFixed(2)}, ${element.location_y.toFixed(2)}, ${element.location_z.toFixed(2)})`;
+const locationDecminals = 0;
+export const locationRenderer = (element: SlabType) =>
+  `(${element.location_x.toFixed(locationDecminals)}, ${element.location_y.toFixed(locationDecminals)}, ${element.location_z.toFixed(locationDecminals)})`;
 export const rebarRenderer = (element: SlabType) => (
   <>
     <span>
@@ -77,12 +79,12 @@ export const rebarRenderer = (element: SlabType) => (
 
 export const DefaultRenderValues: Record<UserCategory, string[]> = {
   [UserCategory.Ubermensch]: AllDefinedRenders.filter((s) => AllDefinedRenders.includes(s)),
-  [UserCategory.Architect]: ['type', 'count', 'planReference', 'dimensions_l', 'dimensions_w', 'dimensions_h'].filter((s) => AllDefinedRenders.includes(s)),
+  [UserCategory.Architect]: ['type', 'count', 'dimensions_l', 'dimensions_w', 'dimensions_h', 'typeOfElement'].filter((s) => AllDefinedRenders.includes(s)),
   [UserCategory.Engineer]: ['type', 'location', 'weight', 'planReference', 'dimensions_l', 'dimensions_h', 'strength', 'liveload', 'edit'].filter((s) =>
     AllDefinedRenders.includes(s)
   ),
   [UserCategory.Client]: ['type', 'typeOfElement', 'count'].filter((s) => AllDefinedRenders.includes(s)),
-  [UserCategory.Contracter]: ['id', 'type', 'planReference', 'location', 'weight', 'dimensions_l', 'dimensions_w', 'dimensions_h', 'edit'],
+  [UserCategory.Contracter]: ['type', 'id', 'planReference', 'location', 'weight', 'dimensions_l', 'dimensions_w', 'dimensions_h', 'edit'],
 };
 
 export const reduceAndUseCount = [UserCategory.Architect, UserCategory.Client];
