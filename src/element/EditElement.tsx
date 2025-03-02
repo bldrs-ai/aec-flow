@@ -4,6 +4,7 @@ import { useRef, useState } from 'react';
 import { DefaultRenderValues, PartTypeKeys, RenderLocal, suffixMap, typeRenderer } from '../table/attributeDefinition';
 import { useTableStore } from '../state/tableStore';
 import { IoMdHammer } from 'react-icons/io';
+import { getNameForElementAndUserCategory } from '../table/nameRenderer';
 
 export const EditElement: React.FC<{ element: SlabType }> = ({ element }) => {
   const activeGlobalUserCategory = useTableStore((s) => s.userCategory);
@@ -36,6 +37,7 @@ export const EditElement: React.FC<{ element: SlabType }> = ({ element }) => {
             <Button onClick={() => setOpen(false)}>cancel</Button>
           </span>
         }
+        title={`Editing: ${getNameForElementAndUserCategory(element, activeGlobalUserCategory)}`}
       >
         {open && element ? (
           <Form<Partial<SlabType>> ref={formRef} initialValues={element} title={typeRenderer(element)} layout='vertical' autoComplete='off'>
