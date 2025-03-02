@@ -2,6 +2,7 @@ import { ColumnType } from 'antd/es/table';
 import { SlabType } from '../types/slabType';
 import { locationRenderer, PartTypeKeys, RenderLocal, suffixMap, typeRenderer, rebarRenderer, getWeight } from './attributeDefinition';
 import { useTableStore } from '../state/tableStore';
+import { EditElement } from '../element/EditElement';
 
 export const columnTypeMap: { [attribute: string]: ColumnType<SlabType> } = {
   ...Object.fromEntries(
@@ -37,6 +38,7 @@ export const columnTypeMap: { [attribute: string]: ColumnType<SlabType> } = {
     title: RenderLocal['type'],
     key: 'type',
     render: (_, element) => typeRenderer(element),
+    sorter: (a, b) => typeRenderer(a).localeCompare(typeRenderer(b)),
   },
   weight: {
     title: RenderLocal['weight'],
@@ -55,5 +57,9 @@ export const columnTypeMap: { [attribute: string]: ColumnType<SlabType> } = {
       useTableStore.getState().elements.filter((s) => typeRenderer(a) === typeRenderer(s)).length -
       useTableStore.getState().elements.filter((s) => typeRenderer(b) === typeRenderer(s)).length,
   },
+  edit: {
+    title: RenderLocal['edit'],
+    key: 'edit',
+    render: (_, element) => <EditElement element={element} />,
   },
 };
