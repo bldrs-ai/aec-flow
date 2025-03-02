@@ -8,7 +8,6 @@ export type SlabType = {
   dimensions_l: number;
   dimensions_w: number;
   dimensions_h: number;
-  weight: number;
   liveload: number;
   typeOfElement: string;
   rebarDiameterTop: number;
