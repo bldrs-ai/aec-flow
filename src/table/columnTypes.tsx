@@ -1,100 +1,65 @@
 import { ColumnType } from 'antd/es/table';
-import { UserCategory } from '../enums/user';
 import { SlabType } from '../types/slabType';
-
-const CostumUIKeys = ['location', 'rebarRenderer', 'type', 'weight'];
-const PartTypeKeys = [
-  'id',
-  'planReference',
-  'location_x',
-  'location_y',
-  'location_z',
-  'strength',
-  'dimensions_l',
-  'dimensions_w',
-  'dimensions_h',
-  'liveload',
-  'typeOfElement',
-  'rebarDiameterTop',
-  'rebarAmountTop',
-  'rebarDiameterBottom',
-  'rebarAmountBottom',
-];
-
-export const AllAvailableColumns = [...CostumUIKeys, ...PartTypeKeys];
-
-const local: Record<string, string> = {
-  id: 'Id',
-  planReference: 'Plan Reference',
-  type: 'Type',
-  location_x: 'X Coordinate',
-  location_y: 'Y Coordinate',
-  location_z: 'Z Coordinate',
-  strength: 'Strength',
-  dimensions_l: 'Length',
-  dimensions_w: 'Width',
-  dimensions_h: 'Height',
-  weight: 'Weight',
-  liveload: 'Live Load',
-  typeOfElement: 'Element Type',
-  rebarDiameterTop: 'Rebar Diameter Top',
-  rebarAmountTop: 'Rebar Amount Top',
-  rebarDiameterBottom: 'Rebar Diameter Bottom',
-  rebarAmountBottom: 'Rebar Diameter Bottom',
-  location: 'Location',
-  rebarRenderer: 'Rebar',
-};
+import { locationRenderer, PartTypeKeys, RenderLocal, suffixMap, typeRenderer, rebarRenderer, getWeight } from './attributeDefinition';
+import { useTableStore } from '../state/tableStore';
+import { EditElement } from '../element/EditElement';
 
 export const columnTypeMap: { [attribute: string]: ColumnType<SlabType> } = {
   ...Object.fromEntries(
     PartTypeKeys.map((dataIndex) => [
       dataIndex,
       {
-        title: local[dataIndex],
+        title: RenderLocal[dataIndex],
         dataIndex,
         key: dataIndex,
+        ...(suffixMap[dataIndex] !== undefined
+          ? {
+              render: (value) => `${value} ${suffixMap[dataIndex]}`,
+              sorter: (a: SlabType, b: SlabType) => ((a[dataIndex as keyof SlabType] as number) - b[dataIndex as keyof SlabType]) as number,
+            }
+          : {
+              sorter: (a: SlabType, b: SlabType) =>
+                (a[dataIndex as keyof SlabType] as string).localeCompare(b[dataIndex as keyof SlabType] as string, undefined, { numeric: true }),
+            }),
       },
     ])
   ),
   location: {
-    title: local['location'],
+    title: RenderLocal['location'],
     key: 'location',
-    render: (_, element) => `(${element.location_x.toFixed(2)}, ${element.location_y.toFixed(2)}, ${element.location_z.toFixed(2)})`,
+    render: (_, element) => locationRenderer(element),
   },
   rebarRenderer: {
-    title: local['rebarRenderer'],
+    title: RenderLocal['rebarRenderer'],
     key: 'rebarRenderer',
-    render: (_, element) => (
-      <p>
-        <span>
-          {`${element.rebarAmountBottom.toFixed(0)}ø${element.rebarDiameterBottom.toFixed(1)}`}
-          <sub>Bottom</sub>
-        </span>{' '}
-        <span>
-          {`${element.rebarAmountTop.toFixed(0)}ø${element.rebarDiameterTop.toFixed(1)}`}
-          <sub>Top</sub>
-        </span>
-      </p>
-    ),
+    render: (_, element) => rebarRenderer(element),
   },
   type: {
-    title: local['type'],
+    title: RenderLocal['type'],
     key: 'type',
-    render: (_, element) =>
-      `${element.typeOfElement} (${element.dimensions_l.toFixed()}, ${element.dimensions_w.toFixed()}, ${element.dimensions_h.toFixed()})`,
+    render: (_, element) => typeRenderer(element),
+    sorter: (a, b) => typeRenderer(a).localeCompare(typeRenderer(b)),
   },
   weight: {
-    title: local['weight'],
+    title: RenderLocal['weight'],
     key: 'weight',
-    render: (_, element) => `${(element.dimensions_l * element.dimensions_w * element.dimensions_h * 0.6 * 0.0000025).toFixed(0)} kg`,
+    render: (_, element) => `${getWeight(element).toFixed(0)} kg`,
+    sorter: (a, b) => getWeight(a) - getWeight(b),
   },
-};
-
-const architect = CostumUIKeys;
-
-export const defaultValues: Record<UserCategory, string[]> = {
-  [UserCategory.Architect]: architect,
-  [UserCategory.Engineer]: [],
-  [UserCategory.Client]: [],
-  [UserCategory.Contracter]: [],
+  count: {
+    title: RenderLocal['count'],
+    key: 'count',
+    render: (_, element) => {
+      const elementDerivedType = typeRenderer(element);
+      return useTableStore.getState().elements.filter((s) => elementDerivedType === typeRenderer(s)).length;
+    },
+    sorter: (a, b) =>
+      useTableStore.getState().elements.filter((s) => typeRenderer(a) === typeRenderer(s)).length -
+      useTableStore.getState().elements.filter((s) => typeRenderer(b) === typeRenderer(s)).length,
+  },
+  edit: {
+    title: RenderLocal['edit'],
+    key: 'edit',
+    render: (_, element) => <EditElement element={element} />,
+  },
 };
