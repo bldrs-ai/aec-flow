@@ -20,6 +20,19 @@ export const PartTypeKeys = [
   'rebarAmountBottom',
 ];
 
+export const suffixMap = {
+  location_x: 'm',
+  location_y: 'm',
+  location_z: 'm',
+  strength: 'kg',
+  dimensions_l: 'm',
+  dimensions_w: 'm',
+  dimensions_h: 'm',
+  liveload: 'kN/m2',
+  rebarDiameterTop: 'mm',
+  rebarDiameterBottom: 'mm',
+};
+
 export const AllDefinedRenders = [...CostumUIKeys, ...PartTypeKeys];
 export const RenderLocal: Record<string, string> = {
   id: 'Id',

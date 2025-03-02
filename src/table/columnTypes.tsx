@@ -1,6 +1,6 @@
 import { ColumnType } from 'antd/es/table';
 import { SlabType } from '../types/slabType';
-import { PartTypeKeys, RenderLocal, typeRenderer } from './attributeDefinition';
+import { PartTypeKeys, RenderLocal, suffixMap, typeRenderer } from './attributeDefinition';
 import { useTableStore } from '../state/tableStore';
 
 export const columnTypeMap: { [attribute: string]: ColumnType<SlabType> } = {
@@ -11,6 +11,7 @@ export const columnTypeMap: { [attribute: string]: ColumnType<SlabType> } = {
         title: RenderLocal[dataIndex],
         dataIndex,
         key: dataIndex,
+        ...(suffixMap[dataIndex] ? { render: (value) => `${value} ${suffixMap[dataIndex]}` } : {}),
       },
     ])
   ),
