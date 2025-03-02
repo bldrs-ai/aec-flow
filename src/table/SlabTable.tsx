@@ -18,7 +18,14 @@ export const SlabTable: React.FC = () => {
   return (
     <>
       <SettingsAndFilterPanel />
-      <Table dataSource={reduceAndUseCount.includes(userCategory) ? getPartsWithUniqueType(elements) : elements} columns={columns}></Table>
+      <Table
+        size='small'
+        sticky={{ offsetHeader: 50 }}
+        scroll={{ x: 1000 }}
+        dataSource={reduceAndUseCount.includes(userCategory) ? getPartsWithUniqueType(elements) : elements}
+        columns={columns}
+        style={{ paddingTop: 45 }}
+      />
     </>
   );
 };
