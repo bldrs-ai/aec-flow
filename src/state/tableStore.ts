@@ -2,7 +2,6 @@ import { create } from 'zustand';
 import { SlabType } from '../types/slabType';
 import { UserCategory } from '../enums/user';
 import { StartData } from './data';
-import DefaultRenderEmpty from 'antd/es/config-provider/defaultRenderEmpty';
 import { DefaultRenderValues } from '../table/attributeDefinition';
 
 type TableStore = {
